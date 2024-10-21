@@ -199,6 +199,6 @@ looker.plugins.visualizations.add({
       this._secondaryTrend.innerHTML = "";
     }
 
-    done();
+    doneRendering();
   }
 });
