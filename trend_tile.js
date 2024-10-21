@@ -145,7 +145,7 @@ looker.plugins.visualizations.add({
   },
 
   // Render in response to data or settings changes
-  updateAsync: function(data, element, config, queryResponse, details, done) {
+  updateAsync: function(data, element, config, queryResponse, details, doneRendering) {
     this.clearErrors();
 
     if (queryResponse.fields.measures.length < 2) {
