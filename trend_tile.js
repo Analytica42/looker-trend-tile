@@ -36,6 +36,12 @@ looker.plugins.visualizations.add({
       display: "color",
       default: "#FF0000"
     },
+    neutral_color: {
+      type: "string",
+      label: "Neutral Trend Color",
+      display: "color",
+      default: "#808080"
+    },
     value_format: {
       type: "string",
       label: "Value Format",
@@ -115,6 +121,9 @@ looker.plugins.visualizations.add({
         .negative-trend {
           color: ${config.negative_color};
         }
+        .neutral-trend {
+          color: ${config.neutral_color};
+        }
       </style>
     `;
 
@@ -175,9 +184,16 @@ looker.plugins.visualizations.add({
     this._primaryElement.innerText = config.primary_text;
     this._primaryElement.style.color = config.primary_color;
 
-    // Add the trend arrow after the current value
-    const arrow = percentageDifference >= 0 ? '▲' : '▼';
-    const trendColor = percentageDifference >= 0 ? config.positive_color : config.negative_color;
+    // Determine trend arrow and color based on the comparison
+    let arrow, trendColor;
+    if (currentValue === previousValue) {
+      arrow = '▬';  // Horizontal line for neutral/no change
+      trendColor = config.neutral_color || '#808080';
+    } else {
+      arrow = currentValue > previousValue ? '▲' : '▼';
+      trendColor = currentValue > previousValue ? config.positive_color : config.negative_color;
+    }
+
     this._valueElement.innerHTML = `${formatValue(currentValue)}`;
     this._trendElement.innerHTML = `<span style="color: ${trendColor};">${arrow}</span>`;
 
